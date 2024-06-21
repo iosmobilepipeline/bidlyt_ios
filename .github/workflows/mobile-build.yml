@@ -49,7 +49,7 @@ jobs:
       - name: Build iOS App
         run: |
           #cd Fastlane
-          caffeinate fastlane prod
+          caffeinate fastlane development
           #bundle exec fastlane development
           # Capture the path of the generated IPA file and store it as an environment variable
           export IPA_PATH=$(ls -d Bidlyt.app/*.ipa | head -n 1)
@@ -61,6 +61,6 @@ jobs:
           IPA_PATH: ${{ env.IPA_PATH }} # Pass the IPA path to Fastfile.upload_to_testflight
         run: |
           # cd Fastlane
-          caffeinate fastlane prod ipa_path:"${IPA_PATH}"
+          caffeinate fastlane development ipa_path:"${IPA_PATH}"
           #bundle exec fastlane upload_to_testflight ipa_path:"${IPA_PATH}"
           cd ..
