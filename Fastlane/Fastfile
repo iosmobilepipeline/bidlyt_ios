@@ -21,7 +21,7 @@ platform :ios do
     update_code_signing_settings(
       use_automatic_signing: false,
       path: "./ios/Bidlyt.xcodeproj",
-      team_id: "B26C6DL35D"
+      team_id: "55DJQPG6M9"
     )
     update_app_identifier(
       xcodeproj: "./ios/Bidlyt.xcodeproj", # Path to the .xcodeproj
