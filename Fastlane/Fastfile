@@ -16,8 +16,8 @@ platform :ios do
   end
   
   # Define a lane called 'development'
-  desc "Build the iOS app for development"
-  lane :development do
+  desc "Build the iOS app for prod"
+  lane :prod do
     update_code_signing_settings(
       use_automatic_signing: false,
       path: "./ios/Bidlyt.xcodeproj",
@@ -36,7 +36,7 @@ platform :ios do
     )
     build_ios_app(
       workspace: "./ios/Bidlyt.xcworkspace", # Path to the .xcworkspace
-      configuration: "Debug", # Use Debug configuration for development
+      configuration: "release", # Use Debug configuration for development
       scheme: "Bidlyt", # Your scheme
       clean: true,
       output_name: "app.ipa",
