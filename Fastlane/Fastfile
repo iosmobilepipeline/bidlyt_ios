@@ -31,8 +31,8 @@ platform :ios do
     update_project_provisioning(
       xcodeproj: "./ios/Bidlyt.xcodeproj", # Path to the .xcodeproj
       profile: "./.github/certs/app.mobileprovision", # Path to the development profile
-      build_configuration: "Debug", # Use Debug configuration for development
-      code_signing_identity: "Development" # Use the Development identity
+      build_configuration: "release", # Use Debug configuration for development
+      code_signing_identity: "Distribution" # Use the Development identity
     )
     build_ios_app(
       workspace: "./ios/Bidlyt.xcworkspace", # Path to the .xcworkspace
@@ -40,7 +40,7 @@ platform :ios do
       scheme: "Bidlyt", # Your scheme
       clean: true,
       output_name: "app.ipa",
-      export_method: "development", # Use development export method
+      export_method: "prod", # Use development export method
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
         compileBitcode: false # Bitcode is usually disabled for development builds
