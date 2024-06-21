@@ -16,8 +16,8 @@ platform :ios do
   end
   
   # Define a lane called 'development'
-  desc "Build the iOS app for prod"
-  lane :prod do
+  desc "Build the iOS app for development"
+  lane :development do
     update_code_signing_settings(
       use_automatic_signing: false,
       path: "./ios/Bidlyt.xcodeproj",
@@ -31,16 +31,16 @@ platform :ios do
     update_project_provisioning(
       xcodeproj: "./ios/Bidlyt.xcodeproj", # Path to the .xcodeproj
       profile: "./.github/certs/app.mobileprovision", # Path to the development profile
-      build_configuration: "release", # Use Debug configuration for development
-      code_signing_identity: "Distribution" # Use the Development identity
+      build_configuration: "Debug", # Use Debug configuration for development
+      code_signing_identity: "Development" # Use the Development identity
     )
     build_ios_app(
       workspace: "./ios/Bidlyt.xcworkspace", # Path to the .xcworkspace
-      configuration: "release", # Use Debug configuration for development
+      configuration: "Debug", # Use Debug configuration for development
       scheme: "Bidlyt", # Your scheme
       clean: true,
       output_name: "app.ipa",
-      export_method: "app-store", # Use development export method
+      export_method: "development", # Use development export method
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
         compileBitcode: false # Bitcode is usually disabled for development builds

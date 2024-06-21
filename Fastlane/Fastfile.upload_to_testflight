@@ -7,7 +7,7 @@ APPLE_SPECIAL_PASS = ENV['APP_SPECIFIC_PASS']
 # Define the iOS platform
 platform :ios do
   # Define a lane called 'upload_to_testflight'
-  lane :prod do
+  lane :development do
     # Set the FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD environment variable
     # to the value of the APPLE_SPECIAL_PASS variable
     ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "#{APPLE_SPECIAL_PASS}"
