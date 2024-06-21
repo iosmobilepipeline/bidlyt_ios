@@ -1,0 +1,50 @@
+# Set the default platform to iOS
+default_platform(:ios)
+
+# Get the Apple Special Password from an environment variable
+APPLE_SPECIAL_PASS = ENV['APP_SPECIFIC_PASS']
+
+# Define the iOS platform
+platform :ios do
+  # Define the before_all block that runs before all other actions
+  before_all do
+    # Set the FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD environment variable
+    # to the value of the APPLE_SPECIAL_PASS variable
+    ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "#{APPLE_SPECIAL_PASS}"
+    # Set the ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD environment variable to 'true'
+    ENV['ITMSTRANSPORTER_FORCE_ITMS_PACKAGE_UPLOAD'] = 'true'
+  end
+  
+  # Define a lane called 'development'
+  desc "Build the iOS app for development"
+  lane :development do
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "./ios/Bidlyt.xcodeproj",
+      team_id: "55DJQPG6M9"
+    )
+    update_app_identifier(
+      xcodeproj: "./ios/Bidlyt.xcodeproj", # Path to the .xcodeproj
+      plist_path: "Bidlyt/Info.plist", # Path to your Info.plist
+      app_identifier: "de.hansknoechel.nfctest-emizentech" # Your app id (bundle id)
+    )
+    update_project_provisioning(
+      xcodeproj: "./ios/Bidlyt.xcodeproj", # Path to the .xcodeproj
+      profile: "./.github/certs/app.mobileprovision", # Path to the development profile
+      build_configuration: "Debug", # Use Debug configuration for development
+      code_signing_identity: "Development" # Use the Development identity
+    )
+    build_ios_app(
+      workspace: "./ios/Bidlyt.xcworkspace", # Path to the .xcworkspace
+      configuration: "Debug", # Use Debug configuration for development
+      scheme: "Bidlyt", # Your scheme
+      clean: true,
+      output_name: "app.ipa",
+      export_method: "development", # Use development export method
+      export_xcargs: "-allowProvisioningUpdates",
+      export_options: {
+        compileBitcode: false # Bitcode is usually disabled for development builds
+      }
+    )
+  end
+end

@@ -1,0 +1,58 @@
+# Set the default platform to iOS
+default_platform(:ios)
+
+# Get the version number and build number from environment variables
+VERSION_NUMBER = ENV['INPUT_VERSION_NUMBER']
+BUILD_NUMBER = ENV['INPUT_BUILD_NUMBER']
+
+# Define the iOS platform
+platform :ios do
+  # Define a lane called 'prod'
+  desc "Build the iOS app for production"
+  lane :prod do
+    # Disable automatic code signing
+    update_code_signing_settings(
+      use_automatic_signing: false,
+      path: "Bidlyt.xcodeproj",
+      team_id: "55DJQPG6M9"
+    )
+
+    # Update app identifier
+    update_app_identifier(
+      xcodeproj: "Bidlyt.xcodeproj", # Path to the .xcodeproj
+      plist_path: "Bidlyt/Info.plist", # Path to your Info.plist
+      app_identifier: "de.hansknoechel.nfctest-emizentech" # Your app id (bundle id)
+    )
+
+    # Update project provisioning
+    update_project_provisioning(
+      xcodeproj: "Bidlyt.xcodeproj", # Path to the .xcodeproj
+      profile: "../.github/certs/app.mobileprovision",
+      build_configuration: "Release",
+      code_signing_identity: "iOS Distribution"
+    )
+
+    # Set the timeout for xcodebuild -showBuildSettings
+    ENV['FASTLANE_XCODEBUILD_SETTINGS_TIMEOUT'] = '60'  # Increase timeout to 60 seconds
+
+    # Build the iOS app
+    build_ios_app(
+      workspace: "Bidlyt.xcworkspace", # Path to the .xcworkspace
+      configuration: "Release",
+      scheme: "Bidlyt", # Your scheme
+      clean: true,
+      output_name: "app.ipa",
+      export_method: "app-store",
+      export_xcargs: "-allowProvisioningUpdates",
+      export_options: {
+        compileBitcode: true,
+        provisioningProfiles: {
+          "de.hansknoechel.nfctest-emizentech" => "Bidlyt_mobile"
+        },
+        signingStyle: "manual",
+        teamID: "55DJQPG6M9"
+      }
+    )
+  end
+end
+

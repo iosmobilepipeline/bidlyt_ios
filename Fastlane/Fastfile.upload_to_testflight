@@ -1,0 +1,27 @@
+# Set the default platform to iOS
+default_platform(:ios)
+
+# Get the Apple Special Password from an environment variable
+APPLE_SPECIAL_PASS = ENV['APP_SPECIFIC_PASS']
+
+# Define the iOS platform
+platform :ios do
+  # Define a lane called 'upload_to_testflight'
+  lane :development do
+    # Set the FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD environment variable
+    # to the value of the APPLE_SPECIAL_PASS variable
+    ENV["FASTLANE_APPLE_APPLICATION_SPECIFIC_PASSWORD"] = "#{APPLE_SPECIAL_PASS}"
+
+    # Assuming your IPA file is generated in the previous step
+    ipa_path = ENV['IPA_PATH'] # This should be set in your workflow after building the IPA
+
+    upload_to_testflight(
+      ipa: ipa_path,
+      username: "virendra@emizentech.com", # Your TestFlight account email
+      apple_id: "6504559316", # Your app's Apple ID
+      skip_submission: true,
+      skip_waiting_for_build_processing: true,
+      itc_provider: "55DJQPG6M9" # Team Id
+    )
+  end
+end

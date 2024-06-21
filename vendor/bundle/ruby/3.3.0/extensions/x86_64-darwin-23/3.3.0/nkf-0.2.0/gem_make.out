@@ -1,0 +1,18 @@
+current directory: /Users/emizentech/Documents/Bidlyt/vendor/bundle/ruby/3.3.0/gems/nkf-0.2.0/ext/nkf
+/usr/local/opt/ruby/bin/ruby extconf.rb
+creating Makefile
+
+current directory: /Users/emizentech/Documents/Bidlyt/vendor/bundle/ruby/3.3.0/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20240418-42878-phc0eg sitelibdir\=./.gem.20240418-42878-phc0eg clean
+
+current directory: /Users/emizentech/Documents/Bidlyt/vendor/bundle/ruby/3.3.0/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20240418-42878-phc0eg sitelibdir\=./.gem.20240418-42878-phc0eg
+compiling nkf.c
+linking shared-object nkf.bundle
+
+current directory: /Users/emizentech/Documents/Bidlyt/vendor/bundle/ruby/3.3.0/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20240418-42878-phc0eg sitelibdir\=./.gem.20240418-42878-phc0eg install
+/usr/bin/install -c -m 0755 nkf.bundle ./.gem.20240418-42878-phc0eg
+
+current directory: /Users/emizentech/Documents/Bidlyt/vendor/bundle/ruby/3.3.0/gems/nkf-0.2.0/ext/nkf
+make DESTDIR\= sitearchdir\=./.gem.20240418-42878-phc0eg sitelibdir\=./.gem.20240418-42878-phc0eg clean

@@ -1,0 +1,66 @@
+name: Build and Upload to TestFlight
+
+on:
+  workflow_dispatch:
+  
+jobs:
+  build_and_upload:
+    name: Build and upload to TestFlight
+    runs-on: macos-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      
+      - name: Cache CocoaPods
+        uses: actions/cache@v2
+        with:
+          path: |
+            ios/Pods
+            ~/.cocoapods
+          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          restore-keys: ${{ runner.os }}-pods
+      
+      - name: Install Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          npm install
+          gem install bundler
+          bundle install
+
+      - name: Set up environment
+        env:
+          DECRYPTION_PASS_CERTIFICATE: '${{ secrets.DECRYPTION_PASS_CERTIFICATE }}'
+          DECRYPTION_PASS_PROFILE: '${{ secrets.DECRYPTION_PASS_PROFILE }}'
+          KEYCHAIN_EXPORT: '${{ secrets.KEYCHAIN_EXPORT }}'
+        run: |
+          # install project dependencies
+          cd ios # Position yourself inside the file that contains your podfile
+          pod install
+          cd ..
+          # add a distribution certificate to the keychain
+          chmod +x ./.github/scripts/set_certificates.sh
+          ./.github/scripts/set_certificates.sh
+
+      - name: Build iOS App
+        run: |
+          #cd Fastlane
+          caffeinate fastlane development
+          #bundle exec fastlane development
+          # Capture the path of the generated IPA file and store it as an environment variable
+          export IPA_PATH=$(ls -d Bidlyt.app/*.ipa | head -n 1)
+          cd ..
+
+      - name: Upload to TestFlight
+        env:
+          APP_SPECIFIC_PASS: ${{ secrets.APP_SPECIFIC_PASS }}
+          IPA_PATH: ${{ env.IPA_PATH }} # Pass the IPA path to Fastfile.upload_to_testflight
+        run: |
+          # cd Fastlane
+          caffeinate fastlane development ipa_path:"${IPA_PATH}"
+          #bundle exec fastlane upload_to_testflight ipa_path:"${IPA_PATH}"
+          cd ..
