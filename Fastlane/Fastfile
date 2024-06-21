@@ -40,7 +40,7 @@ platform :ios do
       scheme: "Bidlyt", # Your scheme
       clean: true,
       output_name: "app.ipa",
-      export_method: "prod", # Use development export method
+      export_method: "app-store", # Use development export method
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
         compileBitcode: false # Bitcode is usually disabled for development builds
