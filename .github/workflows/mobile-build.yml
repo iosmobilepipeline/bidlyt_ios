@@ -46,21 +46,13 @@ jobs:
           chmod +x ./.github/scripts/set_certificates.sh
           ./.github/scripts/set_certificates.sh
 
-      - name: Build iOS App
-        run: |
-          #cd Fastlane
-          caffeinate fastlane development
-          #bundle exec fastlane development
-          # Capture the path of the generated IPA file and store it as an environment variable
-          export IPA_PATH=$(ls -d Bidlyt.app/*.ipa | head -n 1)
-          cd ..
-
-      - name: Upload to TestFlight
+      - name: Build and Upload iOS App
         env:
           APP_SPECIFIC_PASS: ${{ secrets.APP_SPECIFIC_PASS }}
-          IPA_PATH: ${{ env.IPA_PATH }} # Pass the IPA path to Fastfile.upload_to_testflight
         run: |
-          # cd Fastlane
-          caffeinate fastlane development ipa_path:"${IPA_PATH}"
-          #bundle exec fastlane upload_to_testflight ipa_path:"${IPA_PATH}"
-          cd ..
+          fastlane --version  # Ensure Fastlane is installed and print version for verification
+          caffeinate fastlane development
+
+      - name: Print IPA File Path
+        run: |
+          echo "IPA file path: ${{ env.IPA_PATH }}"
