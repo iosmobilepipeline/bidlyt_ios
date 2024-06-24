@@ -35,32 +35,20 @@ platform :ios do
       code_signing_identity: "Development" # Use the Development identity
     )
     build_ios_app(
-      workspace: "./ios/Bidlyt.xcworkspace", # Path to the .xcworkspace
-      configuration: "Debug", # Use Debug configuration for development
-      scheme: "Bidlyt", # Your scheme
+      workspace: "./ios/Bidlyt.xcworkspace",
+      configuration: "Debug",
+      scheme: "Bidlyt",
       clean: true,
       output_name: "app.ipa",
-      export_method: "development", # Use development export method
+      export_method: "development",
       export_xcargs: "-allowProvisioningUpdates",
       export_options: {
-        compileBitcode: false # Bitcode is usually disabled for development builds
+        compileBitcode: false
       }
     )
     # Capture the path of the generated IPA file
     ipa_path = Actions.lane_context[SharedValues::IPA_OUTPUT_PATH]
     UI.message("Generated IPA path: #{ipa_path}")
-    ENV['IPA_PATH'] = ipa_path # Store the path to an environment variable
-
-    # Upload the IPA to TestFlight
-    UI.message("Uploading IPA from path: #{ipa_path}")
-    upload_to_testflight(
-      ipa: ipa_path,
-      username: "virendra@emizentech.com",
-      apple_id: "6504559316",
-      skip_submission: true,
-      skip_waiting_for_build_processing: true,
-      itc_provider: "55DJQPG6M9"
-    )
+    ENV['IPA_PATH'] = ipa_path
   end
 end
-

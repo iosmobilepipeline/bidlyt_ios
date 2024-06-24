@@ -1,0 +1,27 @@
+# upload/Fastlane/Fastfile
+
+# Set the default platform to iOS
+default_platform(:ios)
+
+# Define the iOS platform
+platform :ios do
+  # Define a lane called 'upload'
+  desc "Upload the iOS app to TestFlight"
+  lane :development do
+    ipa_path = ENV['IPA_PATH']
+    if ipa_path.nil?
+      UI.user_error!("IPA path not found. Make sure you have built the app first.")
+    end
+
+    # Upload the IPA to TestFlight
+    UI.message("Uploading IPA from path: #{ipa_path}")
+    upload_to_testflight(
+      ipa: ipa_path,
+      username: "virendra@emizentech.com",
+      apple_id: "6504559316",
+      skip_submission: false, # Set to false to ensure submission to TestFlight
+      skip_waiting_for_build_processing: false,
+      itc_provider: "55DJQPG6M9"
+    )
+  end
+end

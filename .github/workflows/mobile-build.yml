@@ -45,14 +45,14 @@ jobs:
           # add a distribution certificate to the keychain
           chmod +x ./.github/scripts/set_certificates.sh
           ./.github/scripts/set_certificates.sh
-
-      - name: Build and Upload iOS App
-        env:
-          APP_SPECIFIC_PASS: ${{ secrets.APP_SPECIFIC_PASS }}
+     - name: Build iOS App
         run: |
-          fastlane --version  # Ensure Fastlane is installed and print version for verification
-          caffeinate fastlane development
+          # Run Fastlane from the main directory (where Fastfile is located)
+          ipa_path=$(fastlane development | grep "Generated IPA path:" | awk '{print $4}')
+          echo "IPA file path: $ipa_path"
+          echo "##vso[task.setvariable variable=IPA_PATH;]$ipa_path"
 
-      - name: Print IPA File Path
+      - name: Upload to TestFlight
         run: |
-          echo "IPA file path: ${{ env.IPA_PATH }}"
+          cd upload
+          fastlane development
