@@ -6,7 +6,7 @@ on:
 jobs:
   build_and_upload:
     name: Build and upload to TestFlight
-    runs-on: macos-latest
+    runs-on: macos-latest  # Corrected attribute for macOS build
     
     steps:
       - name: Checkout repository
@@ -18,13 +18,13 @@ jobs:
           path: |
             ios/Pods
             ~/.cocoapods
-          key: ${{ runner.os }}-pods-${{ hashFiles('**/Podfile.lock') }}
+          key: ${{ runner.os }}-pods-${{ hashFiles('ios/Podfile.lock') }}
           restore-keys: ${{ runner.os }}-pods
       
       - name: Install Node.js
         uses: actions/setup-node@v2
         with:
-          node-version: '20'
+          node-version: '20'  # Adjust node version as per your project's requirements
       
       - name: Install dependencies
         run: |
@@ -34,18 +34,20 @@ jobs:
 
       - name: Set up environment
         env:
-          DECRYPTION_PASS_CERTIFICATE: '${{ secrets.DECRYPTION_PASS_CERTIFICATE }}'
-          DECRYPTION_PASS_PROFILE: '${{ secrets.DECRYPTION_PASS_PROFILE }}'
-          KEYCHAIN_EXPORT: '${{ secrets.KEYCHAIN_EXPORT }}'
+          APP_SPECIFIC_PASS: ${{ secrets.APP_SPECIFIC_PASS }}
+          DECRYPTION_PASS_CERTIFICATE: ${{ secrets.DECRYPTION_PASS_CERTIFICATE }}
+          DECRYPTION_PASS_PROFILE: ${{ secrets.DECRYPTION_PASS_PROFILE }}
+          KEYCHAIN_EXPORT: ${{ secrets.KEYCHAIN_EXPORT }}
         run: |
-          # install project dependencies
-          cd ios # Position yourself inside the file that contains your podfile
+          # Install project dependencies
+          cd ios
           pod install
           cd ..
-          # add a distribution certificate to the keychain
+          # Add a distribution certificate to the keychain
           chmod +x ./.github/scripts/set_certificates.sh
           ./.github/scripts/set_certificates.sh
-     - name: Build iOS App
+
+      - name: Build iOS App
         run: |
           # Run Fastlane from the main directory (where Fastfile is located)
           ipa_path=$(fastlane development | grep "Generated IPA path:" | awk '{print $4}')
