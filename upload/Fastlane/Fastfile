@@ -1,6 +1,6 @@
 platform :ios do
 
-  lane :development do
+  lane :upload do
     ipa_path = ENV['IPA_PATH']
 
     # Ensure IPA path is available
@@ -18,6 +18,5 @@ platform :ios do
       itc_provider: "55DJQPG6M9"
     )
   end
-
 end
 

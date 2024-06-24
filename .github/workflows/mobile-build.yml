@@ -57,4 +57,4 @@ jobs:
           APP_SPECIFIC_PASS: ${{ secrets.APP_SPECIFIC_PASS }}
         run: |
           cd upload  # Navigate to directory containing the upload Fastfile
-          fastlane development     # Run the 'upload' lane defined 
+          fastlane upload     # Run the 'upload' lane defined 
