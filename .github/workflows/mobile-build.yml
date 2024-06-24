@@ -53,6 +53,8 @@ jobs:
           fastlane development  # Run the 'development' lane in Fastfile
 
       - name: Upload to TestFlight
+        env:
+          APP_SPECIFIC_PASS: ${{ secrets.APP_SPECIFIC_PASS }}
         run: |
           cd upload  # Navigate to directory containing the upload Fastfile
           fastlane development     # Run the 'upload' lane defined 
