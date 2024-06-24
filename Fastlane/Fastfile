@@ -46,9 +46,13 @@ platform :ios do
         compileBitcode: false
       }
     )
-    # Capture the path of the generated IPA file
+
+    # After building, capture the path of the generated IPA file
     ipa_path = Actions.lane_context[SharedValues::IPA_OUTPUT_PATH]
     UI.message("Generated IPA path: #{ipa_path}")
+
+    # Store the IPA path in an environment variable for use in subsequent steps
     ENV['IPA_PATH'] = ipa_path
   end
+
 end

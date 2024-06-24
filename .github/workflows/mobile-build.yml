@@ -49,19 +49,10 @@ jobs:
 
       - name: Build iOS App
         run: |
-          # Run Fastlane and capture the output
-          fastlane_output=$(fastlane development)
-          echo "Fastlane Output:"
-          echo "$fastlane_output"
-
-          # Find the IPA file path in the output
-          ipa_path=$(echo "$fastlane_output" | grep -o "Generated IPA path: .*" | cut -d ' ' -f 4-)
-          echo "IPA file path: $ipa_path"
-
-          # Set the IPA_PATH variable for subsequent steps
-          echo "##vso[task.setvariable variable=IPA_PATH;]$ipa_path"
+          fastlane --version  # Ensure Fastlane is installed and print version for verification
+          fastlane development  # Run the 'development' lane in Fastfile
 
       - name: Upload to TestFlight
         run: |
-          cd upload
-          fastlane development
+          cd upload  # Navigate to directory containing the upload Fastfile
+          fastlane development     # Run the 'upload' lane defined 
